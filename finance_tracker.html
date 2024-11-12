@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: lightgreen;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            background: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .form-container, .profile-container {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+			width: 400px;
+			border-radius: 50px;
+			background-image: linear-gradient(to bottom right, yellow, green);
+			
+        }
+        input, select, button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 40px;
+			background: transparent;
+			font-size: 20px;
+			
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+			width: 200px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: white;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        .clear-button {
+            background: #dc3545;
+        }
+        .clear-button:hover {
+            background: #c82333;
+        }
+		#boxx {
+			width: min-width;
+		}
+		input {
+			width: 300px;
+		}
+    </style>
+</head>
+<body>
+	<div id="boxx">
+    <header>
+        <h1>Personal Finance Tracker</h1>
+    </header>
+    <!--<div class="profile-container">
+        <h2>User Profile</h2>
+        <div id="userProfile" style="display:block;">
+            <h3>Welcome, <span id="userName">User</span>!</h3>
+        </div>
+    </div> -->
+    <center>
+    <div class="form-container">
+        <h2>Add Transaction</h2>
+        <form id="transactionForm">
+            <input type="text" id="description" placeholder="Description" required>
+            <input type="number" id="amount" placeholder="Amount" required>
+            <select id="type">
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+            </select>
+            <button type="submit">Add Transaction</button><button class="clear-button" id="clearBtn">Clear Transactions</button>
+        </form>
+    
+    </div>
+	
+
+    <h2>Transaction History</h2>
+    <h3>Income</h3>
+    <ul id="incomeList"></ul>
+
+    <h3>Expenses</h3>
+    <ul id="expenseList"></ul>
+
+    <h3>Total Balance: ₹<span id="totalBalance">0</span></h3>
+	</div>
+	</center>
+    <script>
+        let totalBalance = 0;
+
+        document.getElementById('transactionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const description = document.getElementById('description').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const type = document.getElementById('type').value;
+
+            const transaction = { description, amount, type };
+            addTransaction(transaction);
+            updateBalance();
+            this.reset();
+        });
+
+        function addTransaction(transaction) {
+            const list = transaction.type === 'income' ? document.getElementById('incomeList') : document.getElementById('expenseList');
+            const listItem = document.createElement('li');
+            listItem.textContent = `${transaction.description} - ₹${Math.abs(transaction.amount)}`;
+            list.appendChild(listItem);
+
+            if (transaction.type === 'income') {
+                totalBalance += transaction.amount;
+            } else {
+                totalBalance -= Math.abs(transaction.amount);
+            }
+        }
+
+        function updateBalance() {
+            document.getElementById('totalBalance').textContent = totalBalance.toFixed(2);
+        }
+
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            document.getElementById('incomeList').innerHTML = '';
+            document.getElementById('expenseList').innerHTML = '';
+            totalBalance = 0;
+            updateBalance();
+        });
+    </script>
+</body>
+</html>
